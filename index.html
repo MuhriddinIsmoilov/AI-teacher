@@ -12,11 +12,12 @@
             theme: {
                 extend: {
                     colors: {
+                        iosBg: '#0b1310',
+                        iosCard: 'rgba(22, 38, 30, 0.65)',
+                        iosBorder: 'rgba(34, 197, 94, 0.2)',
                         brand: {
-                            50: '#f0fdf4',
                             500: '#22c55e',
                             600: '#16a34a',
-                            700: '#15803d',
                         }
                     }
                 }
@@ -27,56 +28,81 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Marked.js for markdown rendering in chat -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* iOS Liquid Glass Effect */
+        .glass-panel {
+            background: rgba(20, 36, 27, 0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        .glass-header {
+            background: rgba(11, 19, 16, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(34, 197, 94, 0.15);
+        }
+        .glass-input {
+            background: rgba(11, 19, 16, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        .glass-input:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.25);
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-iosBg text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
 
-    <!-- Header / Navbar -->
-    <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
+    <!-- Header / Navbar (iOS Style) -->
+    <header class="glass-header sticky top-0 z-50">
         <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="bg-brand-600 p-2 rounded-xl text-white shadow-lg shadow-brand-600/30">
-                    <i class="fa-solid fa-graduation-cap text-xl"></i>
+                <div class="bg-gradient-to-br from-brand-500 to-emerald-700 p-2.5 rounded-2xl text-white shadow-lg shadow-brand-500/30">
+                    <i class="fa-solid fa-graduation-cap text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg tracking-wide">Mindset Fortress</h1>
-                    <p class="text-xs text-slate-400">Gemini AI Teacher</p>
+                    <h1 class="font-semibold text-base tracking-tight text-slate-100">Mindset Fortress</h1>
+                    <p class="text-[11px] text-emerald-400 font-medium">AI English Teacher</p>
                 </div>
             </div>
             
             <!-- Navigation Tabs -->
-            <nav class="hidden md:flex space-x-1 bg-slate-800/60 p-1 rounded-xl border border-slate-700/50">
-                <button onclick="switchTab('chat')" id="nav-chat" class="px-4 py-2 rounded-lg text-sm font-medium transition bg-brand-600 text-white shadow">
-                    <i class="fa-solid fa-comments mr-2"></i>AI Chat
+            <nav class="hidden md:flex space-x-1 bg-black/30 p-1 rounded-xl border border-emerald-500/10">
+                <button onclick="switchTab('chat')" id="nav-chat" class="px-4 py-1.5 rounded-lg text-xs font-medium transition bg-brand-600 text-white shadow-md">
+                    <i class="fa-solid fa-comments mr-1.5"></i>AI Chat
                 </button>
-                <button onclick="switchTab('vocab')" id="nav-vocab" class="px-4 py-2 rounded-lg text-sm font-medium transition text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-book-open mr-2"></i>Lug'at
+                <button onclick="switchTab('vocab')" id="nav-vocab" class="px-4 py-1.5 rounded-lg text-xs font-medium transition text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-book-open mr-1.5"></i>Lug'at
                 </button>
-                <button onclick="switchTab('quiz')" id="nav-quiz" class="px-4 py-2 rounded-lg text-sm font-medium transition text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-puzzle-piece mr-2"></i>Testlar
+                <button onclick="switchTab('quiz')" id="nav-quiz" class="px-4 py-1.5 rounded-lg text-xs font-medium transition text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-puzzle-piece mr-1.5"></i>Testlar
                 </button>
             </nav>
 
             <!-- Status Badge -->
             <div class="flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-xs text-emerald-400 font-medium">Connected</span>
+                <span class="text-[11px] text-emerald-400 font-medium">Connected</span>
             </div>
         </div>
     </header>
 
-    <!-- Mobile Bottom Navigation -->
-    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 z-50 flex justify-around p-3">
-        <button onclick="switchTab('chat')" id="mob-nav-chat" class="flex flex-col items-center text-brand-500">
+    <!-- Mobile Bottom Navigation (iOS Tab Bar Style) -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 glass-header z-50 flex justify-around py-2.5 px-4 border-t border-emerald-500/15">
+        <button onclick="switchTab('chat')" id="mob-nav-chat" class="flex flex-col items-center text-brand-500 transition">
             <i class="fa-solid fa-comments text-lg"></i>
-            <span class="text-[10px] mt-1">Chat</span>
+            <span class="text-[10px] mt-1 font-medium">Chat</span>
         </button>
-        <button onclick="switchTab('vocab')" id="mob-nav-vocab" class="flex flex-col items-center text-slate-400">
+        <button onclick="switchTab('vocab')" id="mob-nav-vocab" class="flex flex-col items-center text-slate-400 transition">
             <i class="fa-solid fa-book-open text-lg"></i>
-            <span class="text-[10px] mt-1">Lug'at</span>
+            <span class="text-[10px] mt-1 font-medium">Lug'at</span>
         </button>
-        <button onclick="switchTab('quiz')" id="mob-nav-quiz" class="flex flex-col items-center text-slate-400">
+        <button onclick="switchTab('quiz')" id="mob-nav-quiz" class="flex flex-col items-center text-slate-400 transition">
             <i class="fa-solid fa-puzzle-piece text-lg"></i>
-            <span class="text-[10px] mt-1">Testlar</span>
+            <span class="text-[10px] mt-1 font-medium">Testlar</span>
         </button>
     </div>
 
@@ -84,19 +110,19 @@
     <main class="max-w-4xl w-full mx-auto p-4 flex-1 flex flex-col mb-16 md:mb-0">
 
         <!-- TAB 1: AI CHAT -->
-        <section id="tab-chat" class="flex-1 flex flex-col h-[75vh] bg-slate-900/40 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+        <section id="tab-chat" class="flex-1 flex flex-col h-[75vh] glass-panel rounded-3xl overflow-hidden shadow-2xl">
             <!-- Chat Header -->
-            <div class="bg-slate-900 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+            <div class="bg-black/20 px-6 py-3.5 border-b border-emerald-500/10 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-brand-600/20 border border-brand-500/30 flex items-center justify-center text-brand-400 font-bold">
-                        AI
+                    <div class="w-9 h-9 rounded-full bg-brand-600/30 border border-brand-500/40 flex items-center justify-center text-brand-400 font-bold text-sm shadow-inner">
+                        MU
                     </div>
                     <div>
-                        <h2 class="font-semibold text-sm">Teacher Alex (Gemini)</h2>
-                        <p class="text-xs text-slate-400">Ingliz tilini o'rganishda yordamchingiz</p>
+                        <h2 class="font-semibold text-xs tracking-wide text-slate-100">Teacher Muhriddin</h2>
+                        <p class="text-[11px] text-slate-400">Ingliz tilini o'rganishda yordamchingiz</p>
                     </div>
                 </div>
-                <button onclick="clearChat()" class="text-slate-400 hover:text-red-400 text-sm transition" title="Chatni tozalash">
+                <button onclick="clearChat()" class="text-slate-400 hover:text-red-400 text-sm transition p-2 rounded-xl hover:bg-white/5" title="Chatni tozalash">
                     <i class="fa-solid fa-trash-can"></i>
                 </button>
             </div>
@@ -105,19 +131,19 @@
             <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4">
                 <!-- Welcome Message -->
                 <div class="flex items-start space-x-3">
-                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">AI</div>
-                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 max-w-[85%] text-sm shadow prose prose-invert">
-                        <p>Hello! I am your AI English Teacher powered by Gemini. Let's practice English! Send me a message or ask any grammar question. How can I help you today?</p>
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-emerald-700 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold shadow-md">AI</div>
+                    <div class="glass-panel rounded-2xl p-4 max-w-[85%] text-sm shadow prose prose-invert">
+                        <p>Hello! I am your AI English Teacher. Let's practice English! Send me a message or ask any grammar question. How can I help you today?</p>
                     </div>
                 </div>
             </div>
 
             <!-- Chat Input Area -->
-            <div class="p-4 bg-slate-900 border-t border-slate-800">
+            <div class="p-4 bg-black/20 border-t border-emerald-500/10">
                 <form id="chat-form" onsubmit="handleSendMessage(event)" class="flex items-center space-x-2">
                     <input type="text" id="user-input" placeholder="Type your message in English..." autocomplete="off"
-                        class="flex-1 bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 transition text-slate-100">
-                    <button type="submit" id="send-btn" class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-3 rounded-xl transition shadow-lg shadow-brand-600/20 flex items-center justify-center">
+                        class="flex-1 glass-input rounded-2xl px-4 py-3 text-sm focus:outline-none transition text-slate-100 placeholder-slate-500">
+                    <button type="submit" id="send-btn" class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-3 rounded-2xl transition shadow-lg shadow-brand-600/30 flex items-center justify-center">
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </form>
@@ -126,20 +152,19 @@
 
         <!-- TAB 2: VOCABULARY -->
         <section id="tab-vocab" class="hidden flex-col space-y-4">
-            <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl">
-                <h2 class="text-xl font-bold mb-2">Kunlik Inglizcha So'zlar</h2>
-                <p class="text-sm text-slate-400 mb-6">Har kuni yangi so'zlarni yodlang va talaffuzini eshiting.</p>
-                
+            <div class="glass-panel p-6 rounded-3xl">
+                <h2 class="text-lg font-bold mb-1 text-slate-100">Kunlik Inglizcha So'zlar</h2>
+                <p class="text-xs text-slate-400 mb-6">Har kuni yangi so'zlarni yodlang va talaffuzini eshiting.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="vocab-grid"></div>
             </div>
         </section>
 
         <!-- TAB 3: QUIZ -->
         <section id="tab-quiz" class="hidden flex-col space-y-4">
-            <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl max-w-xl mx-auto w-full">
+            <div class="glass-panel p-6 rounded-3xl max-w-xl mx-auto w-full">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold">Grammatika Testi</h2>
-                    <span id="quiz-progress" class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-full">1/5-savol</span>
+                    <h2 class="text-lg font-bold text-slate-100">Grammatika Testi</h2>
+                    <span id="quiz-progress" class="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">1/5-savol</span>
                 </div>
                 <div id="quiz-container"></div>
             </div>
@@ -148,13 +173,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-        &copy; 2026 Mindset Fortress. Powered by Gemini API & GitHub Pages.
+    <footer class="border-t border-emerald-500/10 py-4 text-center text-xs text-slate-500 bg-black/20">
+        &copy; 2026 Mindset Fortress. iOS Green Glass Edition.
     </footer>
 
     <!-- JavaScript Logic -->
     <script>
-        // Integrated API Key
         const API_KEY = "AQ.Ab8RN6KX9cmg9vN79kczra_uR9W7wv0YqjYRXaq0RG9DeEv4Fg";
 
         // Tab Switching Logic
@@ -164,10 +188,10 @@
                 document.getElementById(`tab-${t}`).classList.remove('flex');
                 
                 const navBtn = document.getElementById(`nav-${t}`);
-                if(navBtn) navBtn.className = "px-4 py-2 rounded-lg text-sm font-medium transition text-slate-400 hover:text-white";
+                if(navBtn) navBtn.className = "px-4 py-1.5 rounded-lg text-xs font-medium transition text-slate-400 hover:text-white";
                 
                 const mobBtn = document.getElementById(`mob-nav-${t}`);
-                if(mobBtn) mobBtn.className = "flex flex-col items-center text-slate-400";
+                if(mobBtn) mobBtn.className = "flex flex-col items-center text-slate-400 transition";
             });
 
             const activeTab = document.getElementById(`tab-${tabId}`);
@@ -175,10 +199,10 @@
             activeTab.classList.add('flex');
 
             const activeNav = document.getElementById(`nav-${tabId}`);
-            if(activeNav) activeNav.className = "px-4 py-2 rounded-lg text-sm font-medium transition bg-brand-600 text-white shadow";
+            if(activeNav) activeNav.className = "px-4 py-1.5 rounded-lg text-xs font-medium transition bg-brand-600 text-white shadow-md";
 
             const activeMob = document.getElementById(`mob-nav-${tabId}`);
-            if(activeMob) activeMob.className = "flex flex-col items-center text-brand-500";
+            if(activeMob) activeMob.className = "flex flex-col items-center text-brand-500 transition";
         }
 
         // Chat Logic with Gemini API Integration
@@ -194,16 +218,14 @@
             appendMessage(text, 'user');
             input.value = '';
 
-            // Disable input while loading
             const sendBtn = document.getElementById('send-btn');
             sendBtn.disabled = true;
             sendBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i>';
 
-            // Show typing indicator
             const typingId = showTypingIndicator();
 
             try {
-                const systemPrompt = "You are a helpful, encouraging AI English Teacher for Uzbek students. Chat with the user in English, correct their grammar mistakes politely when necessary, and help them improve.";
+                const systemPrompt = "You are a helpful, encouraging AI English Teacher for Uzbek students named Teacher Muhriddin. Chat with the user in English, correct their grammar mistakes politely when necessary, and help them improve.";
                 
                 chatHistory.push({ role: "user", parts: [{ text: text }] });
 
@@ -245,17 +267,17 @@
             if (!isUser) {
                 const formattedHtml = marked.parse(text);
                 wrapper.innerHTML = `
-                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">AI</div>
-                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 max-w-[85%] text-sm shadow prose prose-invert">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-emerald-700 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold shadow-md">AI</div>
+                    <div class="glass-panel rounded-2xl p-4 max-w-[85%] text-sm shadow prose prose-invert">
                         ${formattedHtml}
                     </div>
                 `;
             } else {
                 wrapper.innerHTML = `
-                    <div class="bg-brand-600 text-white rounded-2xl p-4 max-w-[85%] text-sm shadow">
+                    <div class="bg-brand-600 text-white rounded-2xl p-4 max-w-[85%] text-sm shadow-md shadow-brand-600/30">
                         <p>${escapeHtml(text)}</p>
                     </div>
-                    <div class="w-8 h-8 rounded-full bg-slate-700 text-slate-300 flex items-center justify-center flex-shrink-0 text-xs font-bold">You</div>
+                    <div class="w-8 h-8 rounded-full bg-emerald-900/80 border border-emerald-500/30 text-emerald-300 flex items-center justify-center flex-shrink-0 text-xs font-bold shadow-sm">You</div>
                 `;
             }
 
@@ -269,8 +291,8 @@
             wrapper.id = id;
             wrapper.className = 'flex items-start space-x-3';
             wrapper.innerHTML = `
-                <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">AI</div>
-                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 text-sm shadow flex items-center space-x-2 text-slate-400">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-emerald-700 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold shadow-md">AI</div>
+                <div class="glass-panel rounded-2xl p-4 text-sm shadow flex items-center space-x-2 text-slate-400">
                     <span class="w-2 h-2 bg-brand-500 rounded-full animate-bounce"></span>
                     <span class="w-2 h-2 bg-brand-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
                     <span class="w-2 h-2 bg-brand-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
@@ -290,8 +312,8 @@
             chatHistory = [];
             chatMessages.innerHTML = `
                 <div class="flex items-start space-x-3">
-                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">AI</div>
-                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 max-w-[85%] text-sm shadow prose prose-invert">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-emerald-700 text-white flex items-center justify-center flex-shrink-0 text-xs font-bold shadow-md">AI</div>
+                    <div class="glass-panel rounded-2xl p-4 max-w-[85%] text-sm shadow prose prose-invert">
                         <p>Chat cleared. Let's start fresh! What would you like to discuss?</p>
                     </div>
                 </div>
@@ -313,16 +335,16 @@
         function renderVocab() {
             const grid = document.getElementById('vocab-grid');
             grid.innerHTML = vocabList.map((item) => `
-                <div class="bg-slate-950/60 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+                <div class="bg-black/30 border border-emerald-500/20 p-4 rounded-2xl flex flex-col justify-between hover:border-brand-500/40 transition">
                     <div>
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-bold text-brand-400 text-lg">${item.word}</h3>
-                            <button onclick="speakWord('${item.word}')" class="text-slate-400 hover:text-white bg-slate-800/80 p-2 rounded-lg transition">
+                            <h3 class="font-bold text-emerald-400 text-base">${item.word}</h3>
+                            <button onclick="speakWord('${item.word}')" class="text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-xl transition">
                                 <i class="fa-solid fa-volume-high"></i>
                             </button>
                         </div>
-                        <p class="text-sm font-medium text-slate-200 mb-1">${item.uz}</p>
-                        <p class="text-xs text-slate-400 italic">"${item.ex}"</p>
+                        <p class="text-xs font-medium text-slate-200 mb-1">${item.uz}</p>
+                        <p class="text-[11px] text-slate-400 italic">"${item.ex}"</p>
                     </div>
                 </div>
             `).join('');
@@ -363,10 +385,10 @@
             if (currentQuiz >= quizData.length) {
                 container.innerHTML = `
                     <div class="text-center py-8 space-y-4">
-                        <div class="w-16 h-16 bg-brand-600/20 text-brand-400 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">🏆</div>
-                        <h3 class="text-lg font-bold">Test yakunlandi!</h3>
-                        <p class="text-sm text-slate-300">Sizning natijangiz: ${score} / ${quizData.length}</p>
-                        <button onclick="restartQuiz()" class="bg-brand-600 hover:bg-brand-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium transition">Qaytadan boshlash</button>
+                        <div class="w-14 h-14 bg-brand-600/20 text-brand-400 rounded-full flex items-center justify-center mx-auto text-xl font-bold shadow-inner">🏆</div>
+                        <h3 class="text-base font-bold text-slate-100">Test yakunlandi!</h3>
+                        <p class="text-xs text-slate-300">Sizning natijangiz: ${score} / ${quizData.length}</p>
+                        <button onclick="restartQuiz()" class="bg-brand-600 hover:bg-brand-500 text-white px-6 py-2.5 rounded-xl text-xs font-medium transition shadow-md">Qaytadan boshlash</button>
                     </div>
                 `;
                 progress.innerText = `Yakunlandi`;
@@ -377,11 +399,11 @@
             const q = quizData[currentQuiz];
 
             container.innerHTML = `
-                <p class="font-medium text-base mb-4">${q.q}</p>
-                <div class="space-y-3 mb-6">
+                <p class="font-medium text-sm mb-4 text-slate-200">${q.q}</p>
+                <div class="space-y-2.5 mb-6">
                     ${q.options.map((opt, idx) => `
-                        <button onclick="selectOption(${idx})" class="w-full text-left bg-slate-950/80 hover:bg-slate-800 border border-slate-800 p-3.5 rounded-xl text-sm transition">
-                            <span class="font-bold text-brand-500 mr-2">${String.fromCharCode(65 + idx)}.</span>${opt}
+                        <button onclick="selectOption(${idx})" class="w-full text-left bg-black/30 hover:bg-emerald-500/10 border border-emerald-500/15 hover:border-emerald-500/40 p-3.5 rounded-2xl text-xs transition">
+                            <span class="font-bold text-brand-400 mr-2">${String.fromCharCode(65 + idx)}.</span>${opt}
                         </button>
                     `).join('')}
                 </div>
